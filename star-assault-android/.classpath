@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/gdx-backend-android.jar"/>
 	<classpathentry kind="lib" path="/star-assault/libs/gdx.jar" sourcepath="/star-assault/libs/gdx-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/star-assault"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

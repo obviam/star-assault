@@ -1,13 +1,20 @@
 package net.obviam.starassault;
 
-import android.app.Activity;
 import android.os.Bundle;
 
-public class StarAssaultActivity extends Activity {
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+public class StarAssaultActivity extends AndroidApplication {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		config.useWakelock = true;
+		config.useGL20 = true;
+		initialize(new StarAssault(), config);
     }
 }
