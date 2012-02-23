@@ -24,8 +24,6 @@ public class Bob {
 		this.position = position;
 		this.bounds.height = SIZE;
 		this.bounds.width = SIZE;
-		this.bounds.x = position.x + SIZE / 2;
-		this.bounds.y = position.y + SIZE / 2;
 	}
 
 	

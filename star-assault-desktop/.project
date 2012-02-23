@@ -18,7 +18,7 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<locationURI>PARENT_LOC/star-assault/star-assault-android/assets</locationURI>
+			<locationURI>WORKSPACE_LOC/star-assault/star-assault-android/assets</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
