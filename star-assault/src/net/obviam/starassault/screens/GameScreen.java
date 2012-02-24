@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World();
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer(world, false);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		renderer.setSize(width, height);
 	}
 
 	@Override
