@@ -4,6 +4,7 @@ import net.obviam.starassault.controller.WorldController;
 import net.obviam.starassault.model.World;
 import net.obviam.starassault.view.WorldRenderer;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -15,6 +16,8 @@ public class GameScreen implements Screen, InputProcessor {
 	private World 			world;
 	private WorldRenderer 	renderer;
 	private WorldController	controller;
+	
+	private int width, height;
 	
 	@Override
 	public void show() {
@@ -36,6 +39,8 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void resize(int width, int height) {
 		renderer.setSize(width, height);
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -94,14 +99,28 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!Gdx.app.getType().equals(ApplicationType.Android))
+			return false;
+		if (x < width / 2 && y > height / 2) {
+			controller.leftPressed();
+		}
+		if (x > width / 2 && y > height / 2) {
+			controller.rightPressed();
+		}
+		return true;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		if (!Gdx.app.getType().equals(ApplicationType.Android))
+			return false;
+		if (x < width / 2 && y > height / 2) {
+			controller.leftReleased();
+		}
+		if (x > width / 2 && y > height / 2) {
+			controller.rightReleased();
+		}
+		return true;
 	}
 
 	@Override

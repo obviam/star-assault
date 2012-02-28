@@ -10,7 +10,7 @@ public class Bob {
 	}
 	
 	public static final float SPEED = 4f;	// unit per second
-	public static final float JUMP_VELOCITY = 1f;
+	public static final float JUMP_VELOCITY = 4f;
 	public static final float SIZE = 0.5f; // half a unit
 	
 	Vector2 	position = new Vector2();

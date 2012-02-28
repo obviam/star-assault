@@ -92,8 +92,5 @@ public class WorldController {
 			// horizontal speed is 0
 			bob.getVelocity().x = 0;
 		}
-		if (!keys.get(Keys.LEFT) && !(keys.get(Keys.RIGHT))) {
-			bob.setState(State.IDLE);
-		}
 	}
 }
