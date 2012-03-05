@@ -5,11 +5,12 @@ import net.obviam.starassault.model.Bob;
 import net.obviam.starassault.model.World;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
 public class WorldRenderer {
@@ -21,7 +22,7 @@ public class WorldRenderer {
 	private OrthographicCamera cam;
 
 	/** for debug rendering **/
-	ImmediateModeRenderer20 debugRenderer = new ImmediateModeRenderer20(1024, false, true, 0);
+	ShapeRenderer debugRenderer = new ShapeRenderer();
 
 	/** Textures **/
 	private Texture bobTexture;
@@ -78,61 +79,23 @@ public class WorldRenderer {
 	}
 
 	private void drawDebug() {
-		debugRenderer.begin(cam.combined, GL10.GL_LINES);
 		// render blocks
+		debugRenderer.setProjectionMatrix(cam.combined);
+		debugRenderer.begin(ShapeType.Rectangle);
 		for (Block block : world.getBlocks()) {
 			Rectangle rect = block.getBounds();
 			float x1 = block.getPosition().x + rect.x;
 			float y1 = block.getPosition().y + rect.y;
-			float x2 = x1 + rect.width;
-			float y2 = y1 + rect.height;
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x1, y1, 0);
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x1, y2, 0);
-
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x1, y2, 0);
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x2, y2, 0);
-
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x2, y2, 0);
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x2, y1, 0);
-
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x2, y1, 0);
-			debugRenderer.color(1, 0, 0, 1);
-			debugRenderer.vertex(x1, y1, 0);
+			debugRenderer.setColor(new Color(1, 0, 0, 1));
+			debugRenderer.rect(x1, y1, rect.width, rect.height);
 		}
 		// render Bob
 		Bob bob = world.getBob();
 		Rectangle rect = bob.getBounds();
 		float x1 = bob.getPosition().x + rect.x;
 		float y1 = bob.getPosition().y + rect.y;
-		float x2 = x1 + rect.width;
-		float y2 = y1 + rect.height;
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x1, y1, 0);
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x1, y2, 0);
-
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x1, y2, 0);
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x2, y2, 0);
-
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x2, y2, 0);
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x2, y1, 0);
-
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x2, y1, 0);
-		debugRenderer.color(0, 1, 0, 1);
-		debugRenderer.vertex(x1, y1, 0);
-		
+		debugRenderer.setColor(new Color(0, 1, 0, 1));
+		debugRenderer.rect(x1, y1, rect.width, rect.height);
 		debugRenderer.end();
 	}
 }
