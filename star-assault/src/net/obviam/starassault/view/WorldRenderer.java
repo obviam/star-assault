@@ -20,6 +20,7 @@ public class WorldRenderer {
 
 	private static final float CAMERA_WIDTH = 10f;
 	private static final float CAMERA_HEIGHT = 7f;
+	private static final float RUNNING_FRAME_DURATION = 0.06f;
 	
 	private World world;
 	private OrthographicCamera cam;
@@ -70,7 +71,7 @@ public class WorldRenderer {
 		for (int i = 0; i < 5; i++) {
 			walkLeftFrames[i] = atlas.findRegion("bob-0" + (i + 2));
 		}
-		walkLeftAnimation = new Animation(0.1f, walkLeftFrames);
+		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
 
 		TextureRegion[] walkRightFrames = new TextureRegion[5];
 
@@ -78,7 +79,7 @@ public class WorldRenderer {
 			walkRightFrames[i] = new TextureRegion(walkLeftFrames[i]);
 			walkRightFrames[i].flip(true, false);
 		}
-		walkRightAnimation = new Animation(0.1f, walkRightFrames);
+		walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, walkRightFrames);
 	}
 	
 	
@@ -100,7 +101,7 @@ public class WorldRenderer {
 
 	private void drawBob() {
 		Bob bob = world.getBob();
-		bobFrame = bobIdleLeft;
+		bobFrame = bob.isFacingLeft() ? bobIdleLeft : bobIdleRight;
 		if(bob.getState().equals(State.WALKING)) {
 			bobFrame = bob.isFacingLeft() ? walkLeftAnimation.getKeyFrame(bob.getStateTime(), true) : walkRightAnimation.getKeyFrame(bob.getStateTime(), true);
 		}
