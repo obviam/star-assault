@@ -20,6 +20,7 @@ public class Bob {
 	State		state = State.IDLE;
 	boolean		facingLeft = true;
 	float		stateTime = 0;
+	boolean		longJump = false;
 
 	public Bob(Vector2 position) {
 		this.position = position;
@@ -62,6 +63,40 @@ public class Bob {
 
 	public float getStateTime() {
 		return stateTime;
+	}
+
+	public boolean isLongJump() {
+		return longJump;
+	}
+
+
+	public void setLongJump(boolean longJump) {
+		this.longJump = longJump;
+	}
+
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+
+
+	public void setAcceleration(Vector2 acceleration) {
+		this.acceleration = acceleration;
+	}
+
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+
+
+	public void setStateTime(float stateTime) {
+		this.stateTime = stateTime;
 	}
 
 
