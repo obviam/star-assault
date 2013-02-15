@@ -114,18 +114,14 @@ public class WorldRenderer {
 		debugRenderer.begin(ShapeType.Rectangle);
 		for (Block block : world.getBlocks()) {
 			Rectangle rect = block.getBounds();
-			float x1 = block.getPosition().x + rect.x;
-			float y1 = block.getPosition().y + rect.y;
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
-			debugRenderer.rect(x1, y1, rect.width, rect.height);
+			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		}
 		// render Bob
 		Bob bob = world.getBob();
 		Rectangle rect = bob.getBounds();
-		float x1 = bob.getPosition().x + rect.x;
-		float y1 = bob.getPosition().y + rect.y;
 		debugRenderer.setColor(new Color(0, 1, 0, 1));
-		debugRenderer.rect(x1, y1, rect.width, rect.height);
+		debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		debugRenderer.end();
 	}
 }
