@@ -8,28 +8,23 @@ import net.obviam.starassault.model.Bob;
 import net.obviam.starassault.model.Bob.State;
 import net.obviam.starassault.model.World;
 
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Vector2;
-
 public class WorldController {
 
 	enum Keys {
 		LEFT, RIGHT, JUMP, FIRE
 	}
 
-	private static final long LONG_JUMP_PRESS 	= 100l;
-	private static final float X_ACCELERATION 	= 4f;
-	private static final float Y_ACCELERATION 	= 6f;
+	private static final long LONG_JUMP_PRESS 	= 150l;
+	private static final float ACCELERATION 	= 20f;
 	private static final float GRAVITY 			= -20f;
-	private static final float MAX_JUMP_SPEED		= 8f;
-	
+	private static final float MAX_JUMP_SPEED		= 7f;
+	private static final float DAMP = 0.90f;
+	private static final float MAX_VEL = 4f;
+
 	private World 	world;
 	private Bob 	bob;
 	private long	jumpPressedTime;
 	private boolean jumpingPressed;
-	private float	xAcceleration = 0f;
-	private float	yAcceleration = 0f;
-	private Vector2 acceleration = new Vector2();
 	
 	private boolean collidedLeft	= false;
 	private boolean collidedRight	= false;
@@ -88,6 +83,22 @@ public class WorldController {
 	/** The main update method **/
 	public void update(float delta) {
 		processInput();
+		
+		bob.getAcceleration().y = GRAVITY;
+		bob.getAcceleration().mul(delta);
+		bob.getVelocity().add(bob.getAcceleration().x, bob.getAcceleration().y);
+		if (bob.getAcceleration().x == 0) bob.getVelocity().x *= DAMP;
+		if (bob.getVelocity().x > MAX_VEL) {
+			bob.getVelocity().x = MAX_VEL;
+		}
+		if (bob.getVelocity().x < -MAX_VEL) {
+			bob.getVelocity().x = -MAX_VEL;
+		}
+//		bob.getVelocity().mul(delta);
+
+		
+		// check from here
+/*
 		if (bob.getState().equals(State.JUMPING) && !jumpingPressed) {
 			bob.getAcceleration().add(0, GRAVITY);
 		} else if (jumpingPressed) {
@@ -106,13 +117,17 @@ public class WorldController {
 			bob.getVelocity().y = 0f;
 		}
 		bob.getVelocity().y += delta * GRAVITY;
+*/
 		bob.update(delta);
 		if (bob.getPosition().y < 0) {
 			bob.getPosition().y = 0f;
 			bob.setPosition(bob.getPosition());
-			bob.setState(State.IDLE);
+			if (bob.getState().equals(State.JUMPING)) {
+					bob.setState(State.IDLE);
+			}
 		}
 		// check collision with blocks
+		/*
 		for (Block block : world.getBlocks() ) {
 			if (Intersector.intersectRectangles(bob.getBounds(), block.getBounds())) {
 				collideBob(block);
@@ -120,6 +135,7 @@ public class WorldController {
 				}
 			}
 		}
+		*/
 	}
 
 	private void collideBob(Block block) {
@@ -157,6 +173,10 @@ public class WorldController {
 			} else {
 				if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
 					jumpingPressed = false;
+				} else {
+					if (jumpingPressed) {
+						bob.getVelocity().y = MAX_JUMP_SPEED;
+					}
 				}
 			}
 		}
@@ -166,26 +186,22 @@ public class WorldController {
 			if (!bob.getState().equals(State.JUMPING)) {
 				bob.setState(State.WALKING);
 			}
-			bob.getVelocity().x = -Bob.SPEED;
-		}
-		if (keys.get(Keys.RIGHT)) {
+			bob.getAcceleration().x = -ACCELERATION;
+//			bob.getVelocity().x = -Bob.VELOCITY;
+		} else if (keys.get(Keys.RIGHT)) {
 			// left is pressed
 			bob.setFacingLeft(false);
 			if (!bob.getState().equals(State.JUMPING)) {
 				bob.setState(State.WALKING);
 			}
-			bob.getVelocity().x = Bob.SPEED;
-		}
-		// need to check if both or none direction are pressed, then Bob is idle
-		if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) ||
-				(!keys.get(Keys.LEFT) && !(keys.get(Keys.RIGHT))) && !bob.getState().equals(State.JUMPING)) {
+			bob.getAcceleration().x = ACCELERATION;
+//			bob.getVelocity().x = Bob.VELOCITY;
+		} else {
 			if (!bob.getState().equals(State.JUMPING)) {
 				bob.setState(State.IDLE);
 			}
-			// acceleration is 0 on the x
 			bob.getAcceleration().x = 0;
-			// horizontal speed is 0
-			bob.getVelocity().x = 0;
+			
 		}
 		return false;
 	}
