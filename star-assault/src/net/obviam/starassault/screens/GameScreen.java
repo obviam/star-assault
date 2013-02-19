@@ -88,6 +88,8 @@ public class GameScreen implements Screen, InputProcessor {
 			controller.jumpReleased();
 		if (keycode == Keys.X)
 			controller.fireReleased();
+		if (keycode == Keys.D)
+			renderer.setDebug(!renderer.isDebug());
 		return true;
 	}
 

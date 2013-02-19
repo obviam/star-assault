@@ -3,7 +3,6 @@ package net.obviam.starassault.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.obviam.starassault.model.Block;
 import net.obviam.starassault.model.Bob;
 import net.obviam.starassault.model.Bob.State;
 import net.obviam.starassault.model.World;
@@ -17,20 +16,18 @@ public class WorldController {
 	private static final long LONG_JUMP_PRESS 	= 150l;
 	private static final float ACCELERATION 	= 20f;
 	private static final float GRAVITY 			= -20f;
-	private static final float MAX_JUMP_SPEED		= 7f;
-	private static final float DAMP = 0.90f;
-	private static final float MAX_VEL = 4f;
+	private static final float MAX_JUMP_SPEED	= 7f;
+	private static final float DAMP 			= 0.90f;
+	private static final float MAX_VEL 			= 4f;
+	
+	// these are temporary
+	private static final float WIDTH = 10f;
+	private static final float HEIGHT = 7f;
 
 	private World 	world;
 	private Bob 	bob;
 	private long	jumpPressedTime;
 	private boolean jumpingPressed;
-	
-	private boolean collidedLeft	= false;
-	private boolean collidedRight	= false;
-	private boolean collidedBottom	= false;
-	private boolean collidedTop		= false;
-	
 	
 	static Map<Keys, Boolean> keys = new HashMap<WorldController.Keys, Boolean>();
 	static {
@@ -94,8 +91,6 @@ public class WorldController {
 		if (bob.getVelocity().x < -MAX_VEL) {
 			bob.getVelocity().x = -MAX_VEL;
 		}
-//		bob.getVelocity().mul(delta);
-
 		
 		// check from here
 /*
@@ -126,40 +121,20 @@ public class WorldController {
 					bob.setState(State.IDLE);
 			}
 		}
-		// check collision with blocks
-		/*
-		for (Block block : world.getBlocks() ) {
-			if (Intersector.intersectRectangles(bob.getBounds(), block.getBounds())) {
-				collideBob(block);
-				if (bob.getState().equals(State.JUMPING)) {
-				}
+		if (bob.getPosition().x < 0) {
+			bob.getPosition().x = 0;
+			bob.setPosition(bob.getPosition());
+			if (!bob.getState().equals(State.JUMPING)) {
+				bob.setState(State.IDLE);
 			}
 		}
-		*/
-	}
-
-	private void collideBob(Block block) {
-		if (bob.getVelocity().x < 0) {
-			collidedLeft = true;
-			collidedRight = false;
-		} else if (bob.getVelocity().x > 0) {
-			collidedLeft = false;
-			collidedRight = true;
+		if (bob.getPosition().x > WIDTH - bob.getBounds().width ) {
+			bob.getPosition().x = WIDTH - bob.getBounds().width;
+			bob.setPosition(bob.getPosition());
+			if (!bob.getState().equals(State.JUMPING)) {
+				bob.setState(State.IDLE);
+			}
 		}
-		if (bob.getVelocity().y > 0 && bob.getState().equals(State.JUMPING)) {
-			jumpingPressed = false;
-			collidedTop = true;
-			collidedBottom = false;
-		}
-		if (bob.getVelocity().y < 0 && bob.getState().equals(State.JUMPING)) {
-			bob.setState(State.IDLE);
-			jumpingPressed = false;
-			collidedBottom = true;
-			collidedTop = false;
-		}
-//		bob.setState(State.IDLE);
-//		bob.getVelocity().y = 0;
-//		jumping = false;
 	}
 
 	/** Change Bob's state and parameters based on input controls **/
