@@ -7,7 +7,7 @@ import net.obviam.starassault.model.Bob;
 import net.obviam.starassault.model.Bob.State;
 import net.obviam.starassault.model.World;
 
-public class WorldController {
+public class BobController {
 
 	enum Keys {
 		LEFT, RIGHT, JUMP, FIRE
@@ -22,14 +22,13 @@ public class WorldController {
 	
 	// these are temporary
 	private static final float WIDTH = 10f;
-	private static final float HEIGHT = 7f;
 
 	private World 	world;
 	private Bob 	bob;
 	private long	jumpPressedTime;
 	private boolean jumpingPressed;
 	
-	static Map<Keys, Boolean> keys = new HashMap<WorldController.Keys, Boolean>();
+	static Map<Keys, Boolean> keys = new HashMap<BobController.Keys, Boolean>();
 	static {
 		keys.put(Keys.LEFT, false);
 		keys.put(Keys.RIGHT, false);
@@ -37,7 +36,7 @@ public class WorldController {
 		keys.put(Keys.FIRE, false);
 	};
 
-	public WorldController(World world) {
+	public BobController(World world) {
 		this.world = world;
 		this.bob = world.getBob();
 	}
@@ -92,27 +91,6 @@ public class WorldController {
 			bob.getVelocity().x = -MAX_VEL;
 		}
 		
-		// check from here
-/*
-		if (bob.getState().equals(State.JUMPING) && !jumpingPressed) {
-			bob.getAcceleration().add(0, GRAVITY);
-		} else if (jumpingPressed) {
-			bob.getVelocity().y = MAX_JUMP_SPEED; 
-		}
-		if (collidedLeft && bob.getVelocity().x < 0) {
-			bob.getVelocity().x = 0f;
-		}
-		if (collidedRight && bob.getVelocity().x > 0) {
-			bob.getVelocity().x = 0f;
-		}
-		if (collidedBottom && bob.getVelocity().y < 0) {
-			bob.getVelocity().y = 0f;
-		}
-		if (collidedTop && bob.getVelocity().y > 0) {
-			bob.getVelocity().y = 0f;
-		}
-		bob.getVelocity().y += delta * GRAVITY;
-*/
 		bob.update(delta);
 		if (bob.getPosition().y < 0) {
 			bob.getPosition().y = 0f;
@@ -162,7 +140,6 @@ public class WorldController {
 				bob.setState(State.WALKING);
 			}
 			bob.getAcceleration().x = -ACCELERATION;
-//			bob.getVelocity().x = -Bob.VELOCITY;
 		} else if (keys.get(Keys.RIGHT)) {
 			// left is pressed
 			bob.setFacingLeft(false);
@@ -170,7 +147,6 @@ public class WorldController {
 				bob.setState(State.WALKING);
 			}
 			bob.getAcceleration().x = ACCELERATION;
-//			bob.getVelocity().x = Bob.VELOCITY;
 		} else {
 			if (!bob.getState().equals(State.JUMPING)) {
 				bob.setState(State.IDLE);

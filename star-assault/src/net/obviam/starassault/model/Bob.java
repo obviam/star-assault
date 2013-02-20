@@ -9,10 +9,7 @@ public class Bob {
 		IDLE, WALKING, JUMPING, DYING
 	}
 	
-	public static final float VELOCITY = 4f;	// unit per second
-	public static final float JUMP_VELOCITY = 4f;
 	public static final float SIZE = 0.5f; // half a unit
-	public static final float DAMP = 0.90f;
 
 	Vector2 	position = new Vector2();
 	Vector2 	acceleration = new Vector2();

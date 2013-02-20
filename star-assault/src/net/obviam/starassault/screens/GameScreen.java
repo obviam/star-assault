@@ -1,6 +1,6 @@
 package net.obviam.starassault.screens;
 
-import net.obviam.starassault.controller.WorldController;
+import net.obviam.starassault.controller.BobController;
 import net.obviam.starassault.model.World;
 import net.obviam.starassault.view.WorldRenderer;
 
@@ -15,15 +15,15 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private World 			world;
 	private WorldRenderer 	renderer;
-	private WorldController	controller;
+	private BobController	controller;
 	
 	private int width, height;
 	
 	@Override
 	public void show() {
 		world = new World();
-		renderer = new WorldRenderer(world, true);
-		controller = new WorldController(world);
+		renderer = new WorldRenderer(world, false);
+		controller = new BobController(world);
 		Gdx.input.setInputProcessor(this);
 	}
 
