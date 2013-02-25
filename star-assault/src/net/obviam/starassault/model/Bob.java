@@ -22,6 +22,8 @@ public class Bob {
 
 	public Bob(Vector2 position) {
 		this.position = position;
+		this.bounds.x = position.x;
+		this.bounds.y = position.y;
 		this.bounds.height = SIZE;
 		this.bounds.width = SIZE;
 	}
@@ -101,9 +103,9 @@ public class Bob {
 
 
 	public void update(float delta) {
-		position.add(velocity.tmp().mul(delta));
-		bounds.x = position.x;
-		bounds.y = position.y;
+//		position.add(velocity.tmp().mul(delta));
+//		bounds.x = position.x;
+//		bounds.y = position.y;
 		stateTime += delta;
 	}
 	
