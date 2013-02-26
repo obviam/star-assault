@@ -25,16 +25,14 @@ public class BobController {
 	private static final float DAMP 			= 0.90f;
 	private static final float MAX_VEL 			= 4f;
 	
-	// these are temporary
-	private static final float WIDTH = 10f;
-
 	private World 	world;
 	private Bob 	bob;
 	private long	jumpPressedTime;
 	private boolean jumpingPressed;
 	private boolean grounded = false;
 
-	// This is the rectangle pool used in collision detection 
+	// This is the rectangle pool used in collision detection
+	// Good to avoid instantiation each frame
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
 		@Override
 		protected Rectangle newObject() {
@@ -50,7 +48,7 @@ public class BobController {
 		keys.put(Keys.FIRE, false);
 	};
 
-	// Blocks that Bob can collide with
+	// Blocks that Bob can collide with any given frame
 	private Array<Block> collidable = new Array<Block>();
 	
 	public BobController(World world) {
@@ -95,17 +93,30 @@ public class BobController {
 	
 	/** The main update method **/
 	public void update(float delta) {
+		// Processing the input - setting the states of Bob
 		processInput();
 		
+		// If Bob is grounded then reset the state to IDLE 
 		if (grounded && bob.getState().equals(State.JUMPING)) {
 			bob.setState(State.IDLE);
 		}
 		
+		// Setting initial vertical acceleration 
 		bob.getAcceleration().y = GRAVITY;
+		
+		// Convert acceleration to frame time
 		bob.getAcceleration().mul(delta);
+		
+		// apply acceleration to change velocity
 		bob.getVelocity().add(bob.getAcceleration().x, bob.getAcceleration().y);
+
+		// checking collisions with the surrounding blocks depending on Bob's velocity
+		checkCollisionWithBlocks(delta);
+
+		// apply damping to halt Bob nicely 
 		bob.getVelocity().x *= DAMP;
 		
+		// ensure terminal velocity is not exceeded
 		if (bob.getVelocity().x > MAX_VEL) {
 			bob.getVelocity().x = MAX_VEL;
 		}
@@ -113,60 +124,40 @@ public class BobController {
 			bob.getVelocity().x = -MAX_VEL;
 		}
 		
-		// at this stage we commented out Bob's update method for position
-		// and we will work with the bounds and update position later
-		checkCollisionWithBlocks(delta);
-		
 		// simply updates the state time
 		bob.update(delta);
 
-/*		
-		if (bob.getPosition().y < 0) {
-			bob.getPosition().y = 0f;
-			bob.setPosition(bob.getPosition());
-			if (bob.getState().equals(State.JUMPING)) {
-					bob.setState(State.IDLE);
-			}
-		}
-		if (bob.getPosition().x < 0) {
-			bob.getPosition().x = 0;
-			bob.setPosition(bob.getPosition());
-			if (!bob.getState().equals(State.JUMPING)) {
-				bob.setState(State.IDLE);
-			}
-		}
-		if (bob.getPosition().x > WIDTH - bob.getBounds().width ) {
-			bob.getPosition().x = WIDTH - bob.getBounds().width;
-			bob.setPosition(bob.getPosition());
-			if (!bob.getState().equals(State.JUMPING)) {
-				bob.setState(State.IDLE);
-			}
-		}
-*/
 	}
 
+	/** Collision checking **/
 	private void checkCollisionWithBlocks(float delta) {
-		// set velocity to this particular frame
+		// scale velocity to frame units 
 		bob.getVelocity().mul(delta);
 		
-		// Obtaining the rectangle from the pool instead of instantiating it
+		// Obtain the rectangle from the pool instead of instantiating it
 		Rectangle bobRect = rectPool.obtain();
+		// set the rectangle to bob's bounding box
 		bobRect.set(bob.getBounds().x, bob.getBounds().y, bob.getBounds().width, bob.getBounds().height);
 		
-		// we first check the movement on the horizontal
+		// we first check the movement on the horizontal X axis
 		int startX, endX;
 		int startY = (int) bob.getBounds().y;
 		int endY = (int) (bob.getBounds().y + bob.getBounds().height);
+		// if Bob is heading left then we check if he collides with the block on his left
+		// we check the block on his right otherwise
 		if (bob.getVelocity().x < 0) {
 			startX = endX = (int) Math.floor(bob.getBounds().x + bob.getVelocity().x);
 		} else {
 			startX = endX = (int) Math.floor(bob.getBounds().x + bob.getBounds().width + bob.getVelocity().x);
 		}
-		
+
+		// get the block(s) bob can collide with
 		populateCollidableBlocks(startX, startY, endX, endY);
 
+		// simulate bob's movement on the X
 		bobRect.x += bob.getVelocity().x;
 		
+		// if bob collides, make his horizontal velocity 0
 		for (Block block : collidable) {
 			if (block == null) continue;
 			if (bobRect.overlaps(block.getBounds())) {
@@ -175,9 +166,10 @@ public class BobController {
 			}
 		}
 
-		// resetting the collision box's x position
+		// reset the x position of the collision box
 		bobRect.x = bob.getPosition().x;
 		
+		// the same thing but on the vertical Y axis
 		startX = (int) bob.getBounds().x;
 		endX = (int) (bob.getBounds().x + bob.getBounds().width);
 		if (bob.getVelocity().y < 0) {
@@ -213,6 +205,7 @@ public class BobController {
 		
 	}
 
+	/** populate the collidable array with the blocks found in the enclosing coordinates **/
 	private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
 		collidable.clear();
 		for (int x = startX; x <= endX; x++) {
