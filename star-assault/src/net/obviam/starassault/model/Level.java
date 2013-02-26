@@ -35,6 +35,10 @@ public class Level {
 	public Level() {
 		loadDemoLevel();
 	}
+	
+	public Block get(int x, int y) {
+		return blocks[x][y];
+	}
 
 	private void loadDemoLevel() {
 		width = 10;
