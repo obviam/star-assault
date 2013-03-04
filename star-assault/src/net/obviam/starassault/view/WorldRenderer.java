@@ -105,6 +105,7 @@ public class WorldRenderer {
 			drawBlocks();
 			drawBob();
 		spriteBatch.end();
+		drawCollisionBlocks();
 		if (debug)
 			drawDebug();
 	}
@@ -146,5 +147,16 @@ public class WorldRenderer {
 		debugRenderer.setColor(new Color(0, 1, 0, 1));
 		debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
 		debugRenderer.end();
+	}
+	
+	private void drawCollisionBlocks() {
+		debugRenderer.setProjectionMatrix(cam.combined);
+		debugRenderer.begin(ShapeType.FilledRectangle);
+		debugRenderer.setColor(new Color(1, 1, 1, 1));
+		for (Rectangle rect : world.getCollisionRects()) {
+			debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+		}
+		debugRenderer.end();
+		
 	}
 }

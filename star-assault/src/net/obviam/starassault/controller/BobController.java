@@ -151,17 +151,22 @@ public class BobController {
 			startX = endX = (int) Math.floor(bob.getBounds().x + bob.getBounds().width + bob.getVelocity().x);
 		}
 
+		collidable.clear();
 		// get the block(s) bob can collide with
 		populateCollidableBlocks(startX, startY, endX, endY);
 
 		// simulate bob's movement on the X
 		bobRect.x += bob.getVelocity().x;
 		
+		// clear collision boxes in world
+		world.getCollisionRects().clear();
+		
 		// if bob collides, make his horizontal velocity 0
 		for (Block block : collidable) {
 			if (block == null) continue;
 			if (bobRect.overlaps(block.getBounds())) {
 				bob.getVelocity().x = 0;
+				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
 		}
@@ -189,6 +194,7 @@ public class BobController {
 					grounded = true;
 				}
 				bob.getVelocity().y = 0;
+				world.getCollisionRects().add(block.getBounds());
 				break;
 			}
 		}
@@ -207,7 +213,6 @@ public class BobController {
 
 	/** populate the collidable array with the blocks found in the enclosing coordinates **/
 	private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
-		collidable.clear();
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {
 				if (x >= 0 && x < world.getLevel().getWidth() && y >=0 && y < world.getLevel().getHeight()) {
