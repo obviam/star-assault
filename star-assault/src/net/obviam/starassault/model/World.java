@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import net.obviam.starassault.controller.LevelLoader;
 
 public class World {
 
@@ -62,11 +63,16 @@ public class World {
 
 	// --------------------
 	public World() {
-		createDemoWorld();
+		createWorld();
 	}
 
-	private void createDemoWorld() {
-		bob = new Bob(new Vector2(7, 2));
-		level = new Level();
-	}
+    private void createWorld() {
+        level = LevelLoader.loadLevel(1);
+        bob = new Bob(level.getSpanPosition());
+    }
+
+//    private void createDemoWorld() {
+//		bob = new Bob(new Vector2(7, 2));
+//		level = new Level();
+//	}
 }

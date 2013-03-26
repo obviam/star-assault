@@ -65,7 +65,8 @@ public class WorldRenderer {
 	public WorldRenderer(World world, boolean debug) {
 		this.world = world;
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
-		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
+        this.cam.position.set(world.getBob().getPosition().x, world.getBob().getPosition().y, 0);
+//		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
 		this.debug = debug;
 		spriteBatch = new SpriteBatch();
@@ -101,6 +102,7 @@ public class WorldRenderer {
 	
 	
 	public void render() {
+        spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 			drawBlocks();
 			drawBob();
@@ -113,7 +115,8 @@ public class WorldRenderer {
 
 	private void drawBlocks() {
 		for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
-			spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
+//            spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
+            spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
 		}
 	}
 
@@ -129,7 +132,8 @@ public class WorldRenderer {
 				bobFrame = bob.isFacingLeft() ? bobFallLeft : bobFallRight;
 			}
 		}
-		spriteBatch.draw(bobFrame, bob.getPosition().x * ppuX, bob.getPosition().y * ppuY, Bob.SIZE * ppuX, Bob.SIZE * ppuY);
+//        spriteBatch.draw(bobFrame, bob.getPosition().x * ppuX, bob.getPosition().y * ppuY, Bob.SIZE * ppuX, Bob.SIZE * ppuY);
+        spriteBatch.draw(bobFrame, bob.getPosition().x, bob.getPosition().y, Bob.SIZE, Bob.SIZE);
 	}
 
 	private void drawDebug() {

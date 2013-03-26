@@ -7,6 +7,7 @@ public class Level {
 	private int width;
 	private int height;
 	private Block[][] blocks;
+    private Vector2 spanPosition;
 
 	public int getWidth() {
 		return width;
@@ -40,7 +41,15 @@ public class Level {
 		return blocks[x][y];
 	}
 
-	private void loadDemoLevel() {
+    public Vector2 getSpanPosition() {
+        return spanPosition;
+    }
+
+    public void setSpanPosition(Vector2 spanPosition) {
+        this.spanPosition = spanPosition;
+    }
+
+    private void loadDemoLevel() {
 		width = 10;
 		height = 7;
 		blocks = new Block[width][height];
