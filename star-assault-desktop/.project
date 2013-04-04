@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>assets</name>
-			<type>2</type>
-			<location>/Users/tamas/Documents/workspace.juno/obviam/star-assault/star-assault-android/assets</location>
-		</link>
-	</linkedResources>
 </projectDescription>
