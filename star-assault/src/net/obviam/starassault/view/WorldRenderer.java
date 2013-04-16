@@ -139,7 +139,7 @@ public class WorldRenderer {
 	private void drawDebug() {
 		// render blocks
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.Rectangle);
+		debugRenderer.begin(ShapeType.Line);
 		for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
 			Rectangle rect = block.getBounds();
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
@@ -155,10 +155,10 @@ public class WorldRenderer {
 	
 	private void drawCollisionBlocks() {
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.FilledRectangle);
-		debugRenderer.setColor(new Color(1, 1, 1, 1));
+		debugRenderer.begin(ShapeType.Filled);
+		debugRenderer.setColor(Color.WHITE);
 		for (Rectangle rect : world.getCollisionRects()) {
-			debugRenderer.filledRect(rect.x, rect.y, rect.width, rect.height);
+			debugRenderer.rect(rect.x, rect.y, rect.width, rect.height, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
 		}
 		debugRenderer.end();
 		
