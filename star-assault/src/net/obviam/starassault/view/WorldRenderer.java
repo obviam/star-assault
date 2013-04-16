@@ -81,7 +81,7 @@ public class WorldRenderer {
 	private void drawDebug() {
 		// render blocks
 		debugRenderer.setProjectionMatrix(cam.combined);
-		debugRenderer.begin(ShapeType.Rectangle);
+		debugRenderer.begin(ShapeType.Line);
 		for (Block block : world.getBlocks()) {
 			Rectangle rect = block.getBounds();
 			float x1 = block.getPosition().x + rect.x;

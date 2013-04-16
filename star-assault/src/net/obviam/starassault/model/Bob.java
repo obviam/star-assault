@@ -60,6 +60,6 @@ public class Bob {
 	}
 	
 	public void update(float delta) {
-		position.add(velocity.tmp().mul(delta)); 
+		position.add(velocity.cpy().scl(delta)); 
 	}
 }
