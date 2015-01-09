@@ -105,7 +105,7 @@ public class BobController {
 		bob.getAcceleration().y = GRAVITY;
 		
 		// Convert acceleration to frame time
-		bob.getAcceleration().mul(delta);
+		bob.getAcceleration().scl(delta);
 		
 		// apply acceleration to change velocity
 		bob.getVelocity().add(bob.getAcceleration().x, bob.getAcceleration().y);
@@ -132,7 +132,7 @@ public class BobController {
 	/** Collision checking **/
 	private void checkCollisionWithBlocks(float delta) {
 		// scale velocity to frame units 
-		bob.getVelocity().mul(delta);
+		bob.getVelocity().scl(delta);
 		
 		// Obtain the rectangle from the pool instead of instantiating it
 		Rectangle bobRect = rectPool.obtain();
@@ -206,8 +206,10 @@ public class BobController {
 		bob.getBounds().y = bob.getPosition().y;
 		
 		// un-scale velocity (not in frame time)
-		bob.getVelocity().mul(1 / delta);
-		
+		bob.getVelocity().scl(1 / delta);
+
+		// release rectangle back to pool
+		rectPool.free(bobRect);
 	}
 
 	/** populate the collidable array with the blocks found in the enclosing coordinates **/

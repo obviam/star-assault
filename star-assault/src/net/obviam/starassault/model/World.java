@@ -29,30 +29,22 @@ public class World {
 	public Level getLevel() {
 		return level;
 	}
+
+	private final List<Block> blocks = new ArrayList<Block>(20);
+
 	/** Return only the blocks that need to be drawn **/
 	public List<Block> getDrawableBlocks(int width, int height) {
-		int x = (int)bob.getPosition().x - width;
-		int y = (int)bob.getPosition().y - height;
-		if (x < 0) {
-			x = 0;
-		}
-		if (y < 0) {
-			y = 0;
-		}
-		int x2 = x + 2 * width;
-		int y2 = y + 2 * height;
-		if (x2 > level.getWidth()) {
-			x2 = level.getWidth() - 1;
-		}
-		if (y2 > level.getHeight()) {
-			y2 = level.getHeight() - 1;
-		}
-		
-		List<Block> blocks = new ArrayList<Block>();
-		Block block;
+
+		int x = Math.max(0, (int) bob.getPosition().x - width);
+		int y = Math.max(0, (int) bob.getPosition().y - height);
+
+		int x2 = Math.min(level.getWidth() - 1, (x + 2 * width));
+		int y2 = Math.min(level.getHeight() - 1, (y + 2 * height));
+
+		blocks.clear();
 		for (int col = x; col <= x2; col++) {
 			for (int row = y; row <= y2; row++) {
-				block = level.getBlocks()[col][row];
+				Block block = level.getBlocks()[col][row];
 				if (block != null) {
 					blocks.add(block);
 				}
