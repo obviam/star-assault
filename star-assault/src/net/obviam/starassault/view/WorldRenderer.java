@@ -102,6 +102,9 @@ public class WorldRenderer {
 	
 	
 	public void render() {
+		cam.position.set(world.getBob().getPosition().x, world.getBob().getPosition().y, 0);
+		cam.update();
+
         spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 			drawBlocks();
